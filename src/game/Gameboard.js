@@ -44,18 +44,22 @@ class Gameboard {
 
     updateShipLocs() {
         const shipLocs = [];
+        let row;
+        for (let i = 0; i < this.size; i++) {
+            row = Array(this.size).fill(false);
+            shipLocs.push(row);
+        }
         this.ships.forEach((obj) => {
+            if (obj.pos[0] < 0) return;
             if (obj.pos[2]) {
-                for (let i = 0; i < obj.ship.length; i++) {
-                    const coords = [obj.pos[0] + i, obj.pos[1]];
-                    if (shipLocs.some((element) => {return element[0] === coords[0] && element[1] === coords[1]})) throw Error('collision');
-                    shipLocs.push(coords);
+                for (let i = 0; i < obj.ship.length; i++) { 
+                    if (shipLocs[obj.pos[0] + i][obj.pos[1]]) throw Error('collision');
+                    shipLocs[obj.pos[0] + i][obj.pos[1]] = true;
                 }
             } else {
                 for (let j = 0; j < obj.ship.length; j++) {
-                    const coords = [obj.pos[0], obj.pos[1] + j];
-                    if (shipLocs.some((element) => {return element[0] === coords[0] && element[1] === coords[1]})) throw Error('collision');
-                    shipLocs.push(coords);
+                    if (shipLocs[obj.pos[0]][obj.pos[1] + j]) throw Error('collision');
+                    shipLocs[obj.pos[0]][obj.pos[1] + j] = true;
                 }
             }
         });
