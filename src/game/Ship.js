@@ -7,7 +7,9 @@ class Ship {
     hit(location) {
         if (location < 0 || location >= this.length) throw new Error('Illegal Argument Exception');
         if (this.hitList[location]) throw new Error('Already hit');
-        this.hitList[location] = true;
+        const newList = [...this.hitList];
+        newList[location] = true;
+        this.hitList = newList;
     }
 
     isSunk() {
