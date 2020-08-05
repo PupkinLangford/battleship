@@ -1,8 +1,8 @@
 import Ship from './Ship';
 
 class Gameboard {
-    constructor(size = 10) {
-        this.size = size;
+    constructor(size) {
+        this.size = 10;
         const carrier = new Ship(5);
         const battleship = new Ship(4);
         const cruiser = new Ship(3);
@@ -20,6 +20,7 @@ class Gameboard {
             row = Array(this.size).fill(false);
             this.hitMatrix.push(row);
         }
+        this.sunken = 0;
     }
 
     placeShip(shipIndex, x, y, horizontal) {
@@ -39,7 +40,21 @@ class Gameboard {
     }
 
     receiveAttack(x, y) {
-        return;
+        if (this.hitMatrix[x][y]) throw Error('Already attacked');
+        this.hitMatrix[x][y] = true;
+        const success = this.shipLocs[x][y];
+        if (success !== false) {
+            const shipHit = this.ships[success];
+            const location = shipHit.pos[2] ? x - shipHit.pos[0] : y - shipHit.pos[1];
+            shipHit.ship.hit(location);
+            if (shipHit.ship.isSunk()) this.sunken ++;
+            return true;
+        }
+        return false;
+    }
+
+    allSunk() {
+        return this.sunken === this.ships.length;
     }
 
     updateShipLocs() {
@@ -49,17 +64,17 @@ class Gameboard {
             row = Array(this.size).fill(false);
             shipLocs.push(row);
         }
-        this.ships.forEach((obj) => {
+        this.ships.forEach((obj, idx) => {
             if (obj.pos[0] < 0) return;
             if (obj.pos[2]) {
                 for (let i = 0; i < obj.ship.length; i++) { 
-                    if (shipLocs[obj.pos[0] + i][obj.pos[1]]) throw Error('collision');
-                    shipLocs[obj.pos[0] + i][obj.pos[1]] = true;
+                    if (shipLocs[obj.pos[0] + i][obj.pos[1]] !== false) throw Error('collision');
+                    shipLocs[obj.pos[0] + i][obj.pos[1]] = idx;
                 }
             } else {
                 for (let j = 0; j < obj.ship.length; j++) {
-                    if (shipLocs[obj.pos[0]][obj.pos[1] + j]) throw Error('collision');
-                    shipLocs[obj.pos[0]][obj.pos[1] + j] = true;
+                    if (shipLocs[obj.pos[0]][obj.pos[1] + j] !== false) throw Error('collision');
+                    shipLocs[obj.pos[0]][obj.pos[1] + j] = idx;
                 }
             }
         });
