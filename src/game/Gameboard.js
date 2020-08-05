@@ -40,6 +40,7 @@ class Gameboard {
     }
 
     receiveAttack(x, y) {
+        if (x < 0 || x > this.size || y < 0 || y > this.size) throw Error('Illegal Argument Exception');
         if (this.hitMatrix[x][y]) throw Error('Already attacked');
         this.hitMatrix[x][y] = true;
         const success = this.shipLocs[x][y];
