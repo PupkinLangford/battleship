@@ -11,9 +11,25 @@ class Board extends React.Component {
     }
 
     handleClick(i, j) {
-        this.state.player.attack(i, j); 
-        this.setState({...this.state});
+        if (this.props.cpu || this.props.turn) return;
+        try {
+            this.state.player.attack(i, j);
+            this.setState({...this.state}); // might need to worry about this order
+            this.props.nextTurn();
+        }
+        catch (err) {
+            console.log(err);
+        }
       }
+
+    
+    componentDidUpdate() {
+        if (this.props.cpu && this.props.turn) {
+            this.state.player.randomAttack();
+            this.setState({...this.state});
+            this.props.nextTurn();
+        }
+    }
 
     render() {
         const squares = [];

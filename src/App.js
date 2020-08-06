@@ -1,21 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Board from './components/board';
-import Player from './game/Player';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const plyr = new Player();
-    const cpu = new Player();
-    this.state = {player: plyr, computer: cpu};
+    this.state = {turn: false};
+    this.nextTurn = this.nextTurn.bind(this);
   }
+
+  nextTurn() {
+    this.setState({...this.state, turn: !this.state.turn});
+  }
+
   render() {
     return ( 
       <div className="App">
-        <Board cpu={true}/>
-        <Board cpu={false}/>
+        <Board cpu={true} nextTurn={this.nextTurn} turn={this.state.turn}/>
+        <Board cpu={false} nextTurn={this.nextTurn} turn={this.state.turn}/>
       </div>
     );
   }
