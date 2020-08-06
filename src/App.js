@@ -14,8 +14,8 @@ class App extends React.Component {
   render() {
     return ( 
       <div className="App">
-        <Board player = {this.state.player}/>
-        <Board player = {this.state.computer}/>
+        <Board cpu={true}/>
+        <Board cpu={false}/>
       </div>
     );
   }
