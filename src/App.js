@@ -1,26 +1,24 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Board from './components/board';
+import Player from './game/Player';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    const plyr = new Player();
+    const cpu = new Player();
+    this.state = {player: plyr, computer: cpu};
+  }
+  render() {
+    return ( 
+      <div className="App">
+        <Board player = {this.state.player}/>
+        <Board player = {this.state.computer}/>
+      </div>
+    );
+  }
 }
 
 export default App;
