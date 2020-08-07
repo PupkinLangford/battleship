@@ -25,17 +25,29 @@ class Gameboard {
 
     placeShip(shipIndex, x, y, horizontal) {
         if (x > 10 || y > 10) throw new Error('Ship off board');
-        if (horizontal && x + this.ships[shipIndex].ship.length > 10) throw new Error('Ship off board');
-        if (!horizontal && y +this.ships[shipIndex].ship.length > 10) throw new Error('Ship off board');
+        if (horizontal && x + this.ships[shipIndex].ship.length > 10) return;
+        if (!horizontal && y +this.ships[shipIndex].ship.length > 10) return;
         const oldPos = [...this.ships[shipIndex].pos];
         this.ships[shipIndex].pos = [-10, -10, true];
         this.shipLocs = this.updateShipLocs();
         try {
             this.ships[shipIndex].pos = [x, y, horizontal];
             this.shipLocs = this.updateShipLocs();
+            return true;
         } catch(err) {
             this.ships[shipIndex].pos = [...oldPos];
             this.shipLocs = this.updateShipLocs();
+            return false;
+        }
+    }
+
+    placeShipsRandom() {
+        for(let i = 0; i < this.ships.length; i++) {
+            while (true) {
+                const newCoords = [Math.floor(Math.random() * this.size), Math.floor(Math.random() * this.size), Math.random() > 0.5];
+                const result = this.placeShip(i, ...newCoords);
+                if (result) break;
+            }
         }
     }
 

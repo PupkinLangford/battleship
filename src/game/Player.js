@@ -3,10 +3,15 @@ import Gameboard from './Gameboard';
 class Player {
     constructor() {
         this.oppBoard = new Gameboard();
+        //this.oppBoard.placeShipsRandom();
     }
 
     getBoard() {
         return {...this.oppBoard};
+    }
+
+    randomize() {
+        this.oppBoard.placeShipsRandom();
     }
 
     attack(row, col) {

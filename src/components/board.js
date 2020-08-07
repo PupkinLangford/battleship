@@ -8,10 +8,11 @@ class Board extends React.Component {
         const plyr = new Player();
         this.state = {player: plyr};
         this.handleClick = this.handleClick.bind(this);
+        this.handleDrag = this.handleDrag.bind(this);
     }
 
     handleClick(i, j) {
-        if (this.props.cpu || this.props.turn) return;
+        if (this.props.cpu || this.props.turn || this.props.pregame) return;
         try {
             this.state.player.attack(i, j);
             this.setState({...this.state}); // might need to worry about this order
@@ -22,6 +23,17 @@ class Board extends React.Component {
         }
       }
 
+    
+    handleDrag(i, j) {
+        if(!this.props.cpu || !this.props.pregame) return;
+        console.log('dragging' + i  + j);
+    }
+
+    componentDidMount() {
+        if (!this.props.cpu && this.props.pregame) {
+            this.state.player.randomize();
+        }
+    }
     
     componentDidUpdate() {
         if (this.props.cpu && this.props.turn) {
@@ -46,7 +58,8 @@ class Board extends React.Component {
                 else if (this.state.player.getBoard().hitMatrix[i][j]){
                     inner = '.';
                 }
-            squares.push(<div className={color} onClick={()=> this.handleClick(i,j)}>{inner}</div>)
+            squares.push(<div key={[i, j]} className={color} 
+                onDrag={()=> this.handleDrag(i, j)} onClick={()=> this.handleClick(i,j)}>{inner}</div>)
             }
         }
         return <div className = 'container'>{squares}</div>;
