@@ -15,11 +15,11 @@ class Board extends React.Component {
         if (this.props.cpu || this.props.turn || this.props.pregame) return;
         try {
             this.state.player.attack(i, j);
-            this.setState({...this.state}); // might need to worry about this order
-            this.props.nextTurn();
+            this.setState({...this.state});
+            this.props.nextTurn(this.state.player.wonGame());
         }
         catch (err) {
-            console.log(err);
+            console.log("Location already clicked");
         }
       }
 
@@ -39,7 +39,7 @@ class Board extends React.Component {
         if (this.props.cpu && this.props.turn) {
             this.state.player.randomAttack();
             this.setState({...this.state});
-            this.props.nextTurn();
+            this.props.nextTurn(this.state.player.wonGame());
         }
     }
 
@@ -54,6 +54,7 @@ class Board extends React.Component {
                 }
                 if (this.state.player.getBoard().shipLocs[i][j] !== false && this.state.player.getBoard().hitMatrix[i][j]) {
                     color = 'red';
+                    inner = 'X';
                 }
                 else if (this.state.player.getBoard().hitMatrix[i][j]){
                     inner = '.';

@@ -28,7 +28,8 @@ test('places ship at valid location 2', () => {
 
 test('rejects location out of board', () => {
     const board = new Gameboard();
-    expect(() => board.placeShip(3, 10, 5, true)).toThrow(Error);
+    board.placeShip(3, 10, 5);
+    expect(board.ships[3].pos).toEqual([0, 6, true]);
 });
 
 test('rejects ship collision 1', () => {

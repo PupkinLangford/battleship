@@ -1,7 +1,11 @@
 .App {
   text-align: center;
+}
+
+.boards {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  justify-items: center;
 }
 
 .App-logo {

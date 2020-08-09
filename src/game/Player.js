@@ -3,7 +3,6 @@ import Gameboard from './Gameboard';
 class Player {
     constructor() {
         this.oppBoard = new Gameboard();
-        //this.oppBoard.placeShipsRandom();
     }
 
     getBoard() {

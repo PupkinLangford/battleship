@@ -5,13 +5,14 @@ import Board from './components/board';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {turn: false, pregame: true};
+    this.state = {turn: false, pregame: true, winner: ''};
     this.nextTurn = this.nextTurn.bind(this);
   }
 
-  nextTurn() {
-    this.setState({...this.state, turn: !this.state.turn});
+  nextTurn(boardWinner) {
+    this.setState({...this.state, turn: !this.state.turn, winner: this.state.winner || (boardWinner ? 'Game Over' : '')});
   }
+
 
   startGame = () => {
     if(this.state.pregame) {
@@ -22,9 +23,13 @@ class App extends React.Component {
   render() {
     return ( 
       <div className="App">
-        <Board pregame={this.state.pregame} cpu={true} nextTurn={this.nextTurn} turn={this.state.turn}/>
-        <Board pregame={this.state.pregame} cpu={false} nextTurn={this.nextTurn} turn={this.state.turn}/>
+        <h1>Battleship</h1>
+        <div className="boards">
+          <Board pregame={this.state.pregame} cpu={true} nextTurn={this.nextTurn} turn={this.state.turn}/>
+          <Board pregame={this.state.pregame} cpu={false} nextTurn={this.nextTurn} turn={this.state.turn}/>
+        </div>
         <button onClick={this.startGame}>Start Game</button>
+        <h2>{this.state.winner}</h2>
       </div>
     );
   }
