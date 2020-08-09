@@ -25,8 +25,8 @@ class App extends React.Component {
       <div className="App">
         <h1>Battleship</h1>
         <div className="boards">
-          <Board pregame={this.state.pregame} cpu={true} nextTurn={this.nextTurn} turn={this.state.turn}/>
-          <Board pregame={this.state.pregame} cpu={false} nextTurn={this.nextTurn} turn={this.state.turn}/>
+          <Board pregame={this.state.pregame} cpu={true} nextTurn={this.nextTurn} turn={this.state.turn} winner={!!this.state.winner}/>
+          <Board pregame={this.state.pregame} cpu={false} nextTurn={this.nextTurn} turn={this.state.turn} winner={!!this.state.winner}/>
         </div>
         <button onClick={this.startGame}>Start Game</button>
         <h2>{this.state.winner}</h2>

@@ -11,6 +11,10 @@ class Board extends React.Component {
         this.handleDrag = this.handleDrag.bind(this);
     }
 
+    shouldComponentUpdate() {
+        return !this.props.winner;
+    }
+
     handleClick(i, j) {
         if (this.props.cpu || this.props.turn || this.props.pregame) return;
         try {
