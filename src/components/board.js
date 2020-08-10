@@ -41,6 +41,7 @@ class Board extends React.Component {
     }
 
     handleDrop(i, j) {
+        if(!this.props.cpu || !this.props.pregame) return;
         this.state.player.oppBoard.placeShip(this.state.dragging, i, j, this.state.player.oppBoard.ships[this.state.dragging].pos[2]);
         this.setState({...this.state, dragging: false});
     }
@@ -66,10 +67,14 @@ class Board extends React.Component {
                 let color = '';
                 let inner = '';
                 if (this.props.cpu && this.state.player.getBoard().shipLocs[i][j] !== false){
-                    color = 'blue';
+                    color = 'ship';
                 }
-                if (this.state.player.getBoard().shipLocs[i][j] !== false && this.state.player.getBoard().hitMatrix[i][j]) {
-                    color = 'red';
+                if (this.state.player.getBoard().shipLocs[i][j] !== false && this.state.player.oppBoard.ships[this.state.player.getBoard().shipLocs[i][j]].ship.isSunk()){
+                    color = 'sunken';
+                    inner = 'X';
+                }
+                else if (this.state.player.getBoard().shipLocs[i][j] !== false && this.state.player.getBoard().hitMatrix[i][j]) {
+                    color = 'hit';
                     inner = 'X';
                 }
                 else if (this.state.player.getBoard().hitMatrix[i][j]){
