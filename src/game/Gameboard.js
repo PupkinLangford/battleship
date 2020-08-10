@@ -41,6 +41,10 @@ class Gameboard {
         }
     }
 
+    rotateShip(shipIndex) {
+        this.placeShip(shipIndex, this.ships[shipIndex].pos[0], this.ships[shipIndex].pos[1], !this.ships[shipIndex].pos[2])
+    }
+
     placeShipsRandom() {
         for(let i = 0; i < this.ships.length; i++) {
             while (true) {

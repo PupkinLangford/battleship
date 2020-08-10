@@ -6,9 +6,10 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
         const plyr = new Player();
-        this.state = {player: plyr};
+        this.state = {player: plyr, dragging: false};
         this.handleClick = this.handleClick.bind(this);
         this.handleDrag = this.handleDrag.bind(this);
+        this.handleDrop = this.handleDrop.bind(this);
     }
 
     shouldComponentUpdate() {
@@ -16,6 +17,12 @@ class Board extends React.Component {
     }
 
     handleClick(i, j) {
+        if(this.props.cpu && this.props.pregame) {
+            if (this.state.player.getBoard().shipLocs[i][j] !== false) {
+                this.state.player.oppBoard.rotateShip(this.state.player.getBoard().shipLocs[i][j]);
+                this.setState({...this.state});
+            }
+        }
         if (this.props.cpu || this.props.turn || this.props.pregame) return;
         try {
             this.state.player.attack(i, j);
@@ -29,8 +36,13 @@ class Board extends React.Component {
 
     
     handleDrag(i, j) {
-        if(!this.props.cpu || !this.props.pregame) return;
-        console.log('dragging' + i  + j);
+        if(!this.props.cpu || !this.props.pregame || this.state.player.getBoard().shipLocs[i][j] === false) return;
+        this.setState({...this.state, dragging: this.state.player.getBoard().shipLocs[i][j]});
+    }
+
+    handleDrop(i, j) {
+        this.state.player.oppBoard.placeShip(this.state.dragging, i, j, this.state.player.oppBoard.ships[this.state.dragging].pos[2]);
+        this.setState({...this.state, dragging: false});
     }
 
     componentDidMount() {
@@ -63,8 +75,11 @@ class Board extends React.Component {
                 else if (this.state.player.getBoard().hitMatrix[i][j]){
                     inner = '.';
                 }
-            squares.push(<div key={[i, j]} className={color} 
-                onDrag={()=> this.handleDrag(i, j)} onClick={()=> this.handleClick(i,j)}>{inner}</div>)
+            squares.push(<div key={[i, j]} className={color} draggable={this.state.player.getBoard().shipLocs[i][j] !== false}
+                onDragStart={()=> this.handleDrag(i, j)}
+                onDragOver={(e)=> e.preventDefault()}
+                onClick={()=> this.handleClick(i,j)} 
+                onDrop={() => this.handleDrop(i,j)}>{inner}</div>)
             }
         }
         return <div className = 'container'>{squares}</div>;
